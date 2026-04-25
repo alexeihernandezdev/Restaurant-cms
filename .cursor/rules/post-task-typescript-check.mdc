@@ -1,0 +1,54 @@
+---
+description: Run TypeScript check and fix errors after completing a task
+alwaysApply: true
+---
+
+# Post-Task TypeScript Check
+
+After completing any coding task, always run a TypeScript check and fix any errors before declaring the task finished.
+
+## Workflow
+
+1. **Run TypeScript check**: Execute `npx tsc --noEmit` or the project's TypeScript check command
+2. **Review errors**: If any TypeScript errors are reported, fix them
+3. **Verify fixes**: Re-run the check to confirm all errors are resolved
+4. **Only then**: Consider the task complete
+
+## TypeScript Check Commands
+
+```bash
+# Standard TypeScript check
+npx tsc --noEmit
+
+# With project-specific config
+npx tsc --noEmit --project tsconfig.json
+
+# Next.js project
+npx tsc --noEmit --project tsconfig.json
+```
+
+## Error Fixing Priority
+
+1. **Type errors** (assignability, type mismatches)
+2. **Import/export errors** (missing modules, incorrect paths)
+3. **Syntax errors** caught by TypeScript
+4. **Unused variables/dead code** flagged by linter
+
+## Example Workflow
+
+```
+Task: Add user authentication hook
+  → Implement useAuth hook
+  → Run tsc --noEmit
+  → Error: User type not defined
+  → Define User interface
+  → Run tsc --noEmit again
+  → No errors
+  → Task complete
+```
+
+## Important
+
+- Do not skip the TypeScript check even if the code "looks correct"
+- Fix all errors before finishing, no matter how minor they seem
+- If the project has a CI pipeline, ensure the code passes locally first

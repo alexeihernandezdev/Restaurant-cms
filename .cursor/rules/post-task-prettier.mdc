@@ -1,0 +1,14 @@
+---
+description: Run prettier after completing a file
+alwaysApply: true
+---
+
+# Run Prettier After Completing a File
+
+After completing any file edit, always run prettier to format the file:
+
+```bash
+npx prettier --write <file-path>
+```
+
+This ensures consistent formatting across the project. Only run prettier on the specific file that was edited, not on the entire project.
