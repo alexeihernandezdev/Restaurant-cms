@@ -1,8 +1,8 @@
 import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
-import { CategoriesList } from "@components/categories/CategoriesList";
-import { CategoryModal } from "@components/categories/CategoryModal";
+import { CategoriesList } from "@components/pages/categories/CategoriesList";
+import { CategoryModal } from "@components/pages/categories/CategoryModal";
 
 export default async function CategoriesPage() {
   const session = await auth();

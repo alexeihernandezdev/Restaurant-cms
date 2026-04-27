@@ -1,6 +1,7 @@
 "use client";
 
 import { CategoryActions } from "./CategoryActions";
+import { EmptyState } from "@components/molecules";
 
 interface Category {
   id: string;
@@ -18,9 +19,7 @@ interface CategoriesListProps {
 export function CategoriesList({ categories }: CategoriesListProps) {
   if (categories.length === 0) {
     return (
-      <div className="text-center py-12 text-zinc-500">
-        No hay categorías registradas. Crea tu primera categoría.
-      </div>
+      <EmptyState message="No hay categorías registradas. Crea tu primera categoría." />
     );
   }
 

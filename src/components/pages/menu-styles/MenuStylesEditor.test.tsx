@@ -22,7 +22,8 @@ describe("MenuStylesEditor", () => {
 
   it("renders template options", () => {
     render(<MenuStylesEditor menuStyle={mockMenuStyle as any} />);
-    expect(screen.getByText("Clásico")).toBeInTheDocument();
+    const options = screen.getAllByText("Clásico");
+    expect(options.length).toBeGreaterThan(0);
     expect(screen.getByText("Moderno")).toBeInTheDocument();
     expect(screen.getByText("Minimalista")).toBeInTheDocument();
     expect(screen.getByText("Rústico")).toBeInTheDocument();

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@heroui/react";
 import { Modal } from "@heroui/react";
 import QRCode from "qrcode";
+import { GenericButton } from "@components/atoms/button";
 
 interface QRCodeGeneratorProps {
   tenantSlug: string;
@@ -49,9 +49,9 @@ export function QRCodeGenerator({ tenantSlug }: QRCodeGeneratorProps) {
 
   return (
     <>
-      <Button variant="primary" className="shadow-lg" onPress={handleOpen}>
+      <GenericButton variant="primary" className="shadow-lg" onPress={handleOpen}>
         Ver QR
-      </Button>
+      </GenericButton>
 
       <Modal.Root isOpen={isOpen} onOpenChange={setIsOpen}>
         <Modal.Backdrop />
@@ -80,16 +80,16 @@ export function QRCodeGenerator({ tenantSlug }: QRCodeGeneratorProps) {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" onPress={() => setIsOpen(false)}>
+              <GenericButton variant="outline" onPress={() => setIsOpen(false)}>
                 Cerrar
-              </Button>
-              <Button
+              </GenericButton>
+              <GenericButton
                 variant="primary"
                 onPress={downloadQR}
                 isDisabled={!qrDataUrl}
               >
                 Descargar
-              </Button>
+              </GenericButton>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

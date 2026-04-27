@@ -2,6 +2,7 @@
 
 import { Dish } from "../../types";
 import { DishActions } from "./DishActions";
+import { EmptyState } from "@components/molecules";
 
 interface DishesTableProps {
   dishes: Dish[];
@@ -11,9 +12,7 @@ interface DishesTableProps {
 export function DishesTable({ dishes, categories }: DishesTableProps) {
   if (dishes.length === 0) {
     return (
-      <div className="text-center py-12 text-zinc-500">
-        No hay platos registrados
-      </div>
+      <EmptyState message="No hay platos registrados" />
     );
   }
 

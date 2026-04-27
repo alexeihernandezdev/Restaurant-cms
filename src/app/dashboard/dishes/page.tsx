@@ -1,8 +1,8 @@
 import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
-import { DishesTable } from "@components/dishes/DishesTable";
-import { DishModal } from "@components/dishes/DishModal";
+import { DishesTable } from "@components/pages/dishes/DishesTable";
+import { DishModal } from "@components/pages/dishes/DishModal";
 
 export default async function DishesPage() {
   const session = await auth();

@@ -1,7 +1,7 @@
 import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
-import { MenuStylesEditor } from "@components/menu-styles/MenuStylesEditor";
+import { MenuStylesEditor } from "@components/pages/menu-styles/MenuStylesEditor";
 
 export default async function MenuStylesPage() {
   const session = await auth();

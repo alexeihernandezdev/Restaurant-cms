@@ -35,7 +35,7 @@ export function DashboardSidebar({ user }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-4 py-2 rounded-md transition-colors ${
+              className={`block px-4 py-2 rounded-md transition-colors relative ${
                 isActive
                   ? "bg-primary-100 text-primary-600 dark:bg-primary-900/30"
                   : "hover:bg-zinc-100 dark:hover:bg-zinc-800"

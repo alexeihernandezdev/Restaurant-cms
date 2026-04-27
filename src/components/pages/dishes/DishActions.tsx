@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { updateDish, deleteDish } from "@lib/api/dishes";
-import { Button } from "@heroui/react";
 import { Modal } from "@heroui/react";
-import { Dish } from "../../types";
+import { GenericSelect } from "@components/atoms/select/GenericSelect";
+import { GenericInput } from "@components/atoms/input";
+import { GenericButton } from "@components/atoms/button";
+import type { Dish } from "src/types";
 
 interface DishActionsProps {
   dish: Dish;
@@ -45,12 +47,12 @@ export function DishActions({ dish, categories }: DishActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <Button size="sm" variant="outline" onPress={() => setIsOpen(true)}>
+      <GenericButton size="sm" variant="outline" onPress={() => setIsOpen(true)}>
         Editar
-      </Button>
-      <Button size="sm" variant="danger" onPress={handleDelete}>
+      </GenericButton>
+      <GenericButton size="sm" variant="danger" onPress={handleDelete}>
         Eliminar
-      </Button>
+      </GenericButton>
 
       <Modal.Root isOpen={isOpen} onOpenChange={setIsOpen}>
         <Modal.Backdrop />
@@ -61,13 +63,13 @@ export function DishActions({ dish, categories }: DishActionsProps) {
             </Modal.Header>
             <Modal.Body>
               <div className="space-y-4">
-                <input
+                <GenericInput
                   type="text"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-zinc-300 rounded-md"
+                  placeholder="Nombre del plato"
                 />
                 <textarea
                   value={formData.description}
@@ -77,7 +79,7 @@ export function DishActions({ dish, categories }: DishActionsProps) {
                   className="w-full px-3 py-2 border border-zinc-300 rounded-md"
                   rows={3}
                 />
-                <input
+                <GenericInput
                   type="number"
                   step="0.01"
                   value={formData.price.toString()}
@@ -87,34 +89,32 @@ export function DishActions({ dish, categories }: DishActionsProps) {
                       price: parseFloat(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-zinc-300 rounded-md"
+                  placeholder="Precio"
                 />
-                <select
+                <GenericSelect
                   value={formData.categoryId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, categoryId: e.target.value })
+                  onChange={(value) =>
+                    setFormData({ ...formData, categoryId: value as string })
                   }
-                  className="w-full px-3 py-2 border border-zinc-300 rounded-md"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                  options={categories.map((cat) => ({
+                    id: cat.id,
+                    label: cat.name,
+                  }))}
+                  placeholder="Selecciona una categoría"
+                />
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" onPress={() => setIsOpen(false)}>
+              <GenericButton variant="outline" onPress={() => setIsOpen(false)}>
                 Cancelar
-              </Button>
-              <Button
+              </GenericButton>
+              <GenericButton
                 variant="primary"
                 isPending={loading}
                 onPress={handleUpdate}
               >
                 Guardar
-              </Button>
+              </GenericButton>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

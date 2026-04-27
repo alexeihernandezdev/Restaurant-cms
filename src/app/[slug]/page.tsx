@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTenantBySlug } from "@lib/tenant";
-import { MenuDisplay } from "@components/menu/MenuDisplay";
-import { QRCodeGenerator } from "@components/menu/QRCodeGenerator";
+import { MenuDisplay } from "@components/pages/menu/MenuDisplay";
+import { QRCodeGenerator } from "@components/pages/menu/QRCodeGenerator";
 
 interface MenuPageProps {
   params: Promise<{ slug: string }>;

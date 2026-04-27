@@ -1,4 +1,4 @@
-import { fetcher } from "./fetcher";
+import { fetcher } from "../utils/fetcher";
 
 export async function uploadImage(file: File) {
   const formData = new FormData();

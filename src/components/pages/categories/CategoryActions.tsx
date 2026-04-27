@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { updateCategory, deleteCategory } from "@lib/api/categories";
-import { Button } from "@heroui/react";
 import { Modal } from "@heroui/react";
+import { GenericInput } from "@components/atoms/input";
+import { GenericButton } from "@components/atoms/button";
 
 interface CategoryActionsProps {
   category: {
@@ -49,12 +50,12 @@ export function CategoryActions({ category }: CategoryActionsProps) {
 
   return (
     <div className="flex gap-2">
-      <Button size="sm" variant="outline" onPress={() => setIsOpen(true)}>
+      <GenericButton size="sm" variant="outline" onPress={() => setIsOpen(true)}>
         Editar
-      </Button>
-      <Button size="sm" variant="danger" onPress={handleDelete}>
+      </GenericButton>
+      <GenericButton size="sm" variant="danger" onPress={handleDelete}>
         Eliminar
-      </Button>
+      </GenericButton>
 
       <Modal.Root isOpen={isOpen} onOpenChange={setIsOpen}>
         <Modal.Backdrop />
@@ -65,13 +66,13 @@ export function CategoryActions({ category }: CategoryActionsProps) {
             </Modal.Header>
             <Modal.Body>
               <div className="space-y-4">
-                <input
+                <GenericInput
                   type="text"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-zinc-300 rounded-md"
+                  placeholder="Nombre de la categoría"
                 />
                 <textarea
                   value={formData.description}
@@ -84,16 +85,16 @@ export function CategoryActions({ category }: CategoryActionsProps) {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline" onPress={() => setIsOpen(false)}>
+              <GenericButton variant="outline" onPress={() => setIsOpen(false)}>
                 Cancelar
-              </Button>
-              <Button
+              </GenericButton>
+              <GenericButton
                 variant="primary"
                 isPending={loading}
                 onPress={handleUpdate}
               >
                 Guardar
-              </Button>
+              </GenericButton>
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
