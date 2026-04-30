@@ -1,73 +1,95 @@
 "use client";
 
-import { Card, Button } from "@heroui/react";
-import { Cookie, Bookmark, Eye, ArrowRight, Plus, FolderPlus, Palette } from "lucide-react";
+import {
+  UtensilsCrossed,
+  FolderTree,
+  Eye,
+  ArrowRight,
+  Plus,
+  FolderPlus,
+  Palette,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 interface StatCardProps {
   title: string;
   value: string | number;
   description?: string;
-  icon: React.ReactNode;
-  variant?: "default" | "secondary" | "tertiary";
+  icon: LucideIcon;
+  gradient: string;
+  trend?: string;
 }
 
-function StatCard({ title, value, description, icon, variant = "default" }: StatCardProps) {
+function StatCard({
+  title,
+  value,
+  description,
+  icon: Icon,
+  gradient,
+  trend,
+}: StatCardProps) {
   return (
-    <Card variant={variant} className="py-6 px-4">
-      <Card.Header className="flex-row items-center gap-4">
-        <div className="p-3 rounded-xl bg-primary/10">
-          {icon}
+    <div className="group relative overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-surface p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated">
+      <div
+        aria-hidden
+        className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${gradient}`}
+      />
+      <div className="flex items-start justify-between">
+        <div
+          className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} text-white shadow-soft`}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2.25} />
         </div>
-        <div className="flex flex-col">
-          <Card.Title className="text-large font-medium">{title}</Card.Title>
-          {description && (
-            <Card.Description className="text-small text-default-500">
-              {description}
-            </Card.Description>
-          )}
-        </div>
-      </Card.Header>
-      <Card.Content className="pt-0">
-        <p className="text-4xl font-bold text-foreground">{value}</p>
-      </Card.Content>
-      <Card.Footer className="pt-0 pb-0 px-0">
-        <Button variant="ghost" size="sm" className="text-default-400">
-          Ver detalles
-          <ArrowRight className="w-4 h-4 ml-1" />
-        </Button>
-      </Card.Footer>
-    </Card>
+        {trend && (
+          <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
+            {trend}
+          </span>
+        )}
+      </div>
+      <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+        {title}
+      </p>
+      <p className="mt-1 text-4xl font-bold tracking-tight text-foreground">
+        {value}
+      </p>
+      {description && (
+        <p className="mt-1 text-sm text-zinc-500">{description}</p>
+      )}
+    </div>
   );
 }
 
 interface QuickActionProps {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: LucideIcon;
   href: string;
+  gradient: string;
 }
 
-function QuickAction({ title, description, icon, href }: QuickActionProps) {
+function QuickAction({
+  title,
+  description,
+  icon: Icon,
+  href,
+  gradient,
+}: QuickActionProps) {
   return (
-    <Link href={href} className="block cursor-pointer">
-      <Card variant="secondary" className="py-5 px-5 h-full transition-colors hover:bg-secondary/50">
-        <Card.Header className="flex-row items-center gap-4 p-0">
-          <div className="p-3 rounded-xl bg-secondary/20">
-            {icon}
-          </div>
-          <div className="flex flex-col">
-            <Card.Title className="text-base font-semibold">{title}</Card.Title>
-            <Card.Description className="text-small">{description}</Card.Description>
-          </div>
-        </Card.Header>
-        <Card.Footer className="p-0 pt-4">
-          <Button variant="ghost" size="sm" className="w-fit p-0 h-auto text-secondary-foreground">
-            Ir ahora
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </Button>
-        </Card.Footer>
-      </Card>
+    <Link
+      href={href}
+      className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-surface p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elevated"
+    >
+      <div
+        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} text-white shadow-soft transition-transform group-hover:scale-110`}
+      >
+        <Icon className="h-5 w-5" strokeWidth={2.25} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold tracking-tight">{title}</p>
+        <p className="truncate text-xs text-zinc-500">{description}</p>
+      </div>
+      <ArrowRight className="h-4 w-4 shrink-0 text-zinc-400 transition-transform group-hover:translate-x-0.5 group-hover:text-primary-600" />
     </Link>
   );
 }
@@ -78,69 +100,87 @@ interface DashboardCardsProps {
   menuVisits?: number;
 }
 
-export function DashboardCards({ dishCount, categoryCount, menuVisits = 0 }: DashboardCardsProps) {
+export function DashboardCards({
+  dishCount,
+  categoryCount,
+  menuVisits = 0,
+}: DashboardCardsProps) {
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">Estadísticas</h2>
-          <p className="text-default-500 text-small mt-1">Resumen de tu restaurante</p>
+    <div className="space-y-10">
+      <section>
+        <div className="mb-4 flex items-end justify-between">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight">
+              Estadísticas
+            </h2>
+            <p className="text-sm text-zinc-500">Resumen rápido de tu menú</p>
+          </div>
         </div>
-      </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <StatCard
+            title="Total de Platos"
+            value={dishCount}
+            description="Platos en tu menú"
+            icon={UtensilsCrossed}
+            gradient="from-rose-500 to-orange-500"
+          />
+          <StatCard
+            title="Categorías"
+            value={categoryCount}
+            description="Categorías activas"
+            icon={FolderTree}
+            gradient="from-violet-500 to-fuchsia-500"
+          />
+          <StatCard
+            title="Visitas al Menú"
+            value={menuVisits}
+            description="Veces que han visto tu carta"
+            icon={Eye}
+            gradient="from-amber-500 to-rose-500"
+          />
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard
-          title="Total de Platos"
-          value={dishCount}
-          description="Platos en tu menú"
-          icon={<Cookie className="w-6 h-6 text-primary" />}
-          variant="default"
-        />
-        <StatCard
-          title="Categorías"
-          value={categoryCount}
-          description="Categorías activas"
-          icon={<Bookmark className="w-6 h-6 text-primary" />}
-          variant="secondary"
-        />
-        <StatCard
-          title="Visitas al Menú"
-          value={menuVisits}
-          description="Veces que han visto tu menú"
-          icon={<Eye className="w-6 h-6 text-primary" />}
-          variant="tertiary"
-        />
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4">Acciones Rápidas</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold tracking-tight">
+            Acciones Rápidas
+          </h2>
+          <p className="text-sm text-zinc-500">
+            Salta directo a lo que necesitas
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <QuickAction
             title="Agregar Plato"
             description="Nuevo platillo a tu menú"
-            icon={<Plus className="w-6 h-6 text-secondary-foreground" />}
+            icon={Plus}
             href="/dashboard/dishes"
+            gradient="from-rose-500 to-orange-500"
           />
           <QuickAction
             title="Crear Categoría"
             description="Organiza tu menú"
-            icon={<FolderPlus className="w-6 h-6 text-secondary-foreground" />}
+            icon={FolderPlus}
             href="/dashboard/categories"
-          />
-          <QuickAction
-            title="Ver Menú"
-            description="Vista previa pública"
-            icon={<Eye className="w-6 h-6 text-secondary-foreground" />}
-            href="/menu"
+            gradient="from-violet-500 to-fuchsia-500"
           />
           <QuickAction
             title="Configurar Estilos"
             description="Personaliza tu menú"
-            icon={<Palette className="w-6 h-6 text-secondary-foreground" />}
+            icon={Palette}
             href="/dashboard/menu-styles"
+            gradient="from-amber-500 to-rose-500"
+          />
+          <QuickAction
+            title="Ver Menú"
+            description="Vista previa pública"
+            icon={Eye}
+            href="/menu"
+            gradient="from-emerald-500 to-teal-500"
           />
         </div>
-      </div>
+      </section>
     </div>
   );
 }

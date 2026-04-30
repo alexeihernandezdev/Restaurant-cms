@@ -1,8 +1,10 @@
 import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { FolderTree } from "lucide-react";
 import { CategoriesList } from "@components/pages/categories/CategoriesList";
 import { CategoryModal } from "@components/pages/categories/CategoryModal";
+import { PageHeader } from "@components/molecules";
 
 export default async function CategoriesPage() {
   const session = await auth();
@@ -24,10 +26,13 @@ export default async function CategoriesPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Categorías</h1>
-        <CategoryModal />
-      </div>
+      <PageHeader
+        eyebrow="Menú"
+        title="Categorías"
+        description="Agrupa tus platos en secciones para que tu menú sea fácil de leer."
+        icon={FolderTree}
+        actions={<CategoryModal />}
+      />
 
       <CategoriesList categories={categories} />
     </div>

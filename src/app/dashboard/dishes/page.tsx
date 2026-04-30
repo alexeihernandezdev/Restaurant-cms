@@ -1,8 +1,10 @@
 import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { UtensilsCrossed } from "lucide-react";
 import { DishesTable } from "@components/pages/dishes/DishesTable";
 import { DishModal } from "@components/pages/dishes/DishModal";
+import { PageHeader } from "@components/molecules";
 
 export default async function DishesPage() {
   const session = await auth();
@@ -26,12 +28,17 @@ export default async function DishesPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Platos</h1>
-        <DishModal categories={categories} />
-      </div>
+      <PageHeader
+        eyebrow="Menú"
+        title="Platos"
+        description="Gestiona los platillos de tu carta. Organízalos, edita precios y mucho más."
+        icon={UtensilsCrossed}
+        actions={<DishModal categories={categories} />}
+      />
 
-      <DishesTable dishes={dishes as any} categories={categories} />
+      <div className="rounded-2xl border border-[var(--border-soft)] bg-surface shadow-soft">
+        <DishesTable dishes={dishes as any} categories={categories} />
+      </div>
     </div>
   );
 }

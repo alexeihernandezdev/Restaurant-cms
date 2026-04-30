@@ -1,6 +1,7 @@
 "use client";
 
-import { Dish } from "../../types";
+import { ImageOff } from "lucide-react";
+import type { Dish } from "../../../types";
 import { DishActions } from "./DishActions";
 import { EmptyState } from "@components/molecules";
 
@@ -12,7 +13,9 @@ interface DishesTableProps {
 export function DishesTable({ dishes, categories }: DishesTableProps) {
   if (dishes.length === 0) {
     return (
-      <EmptyState message="No hay platos registrados" />
+      <div className="p-6">
+        <EmptyState message="No hay platos registrados" />
+      </div>
     );
   }
 
@@ -20,26 +23,23 @@ export function DishesTable({ dishes, categories }: DishesTableProps) {
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b border-zinc-200 dark:border-zinc-700">
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
-              Imagen
+          <tr className="border-b border-[var(--border-soft)] bg-surface-muted/50">
+            <th className="py-3 px-5 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+              Plato
             </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
-              Nombre
-            </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
+            <th className="py-3 px-5 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
               Descripción
             </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
+            <th className="py-3 px-5 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
               Precio
             </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
+            <th className="py-3 px-5 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
               Categoría
             </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
-              Disponible
+            <th className="py-3 px-5 text-left text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+              Estado
             </th>
-            <th className="text-left py-3 px-4 font-medium text-zinc-500">
+            <th className="py-3 px-5 text-right text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
               Acciones
             </th>
           </tr>
@@ -48,41 +48,61 @@ export function DishesTable({ dishes, categories }: DishesTableProps) {
           {dishes.map((dish) => (
             <tr
               key={dish.id}
-              className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+              className="border-b border-[var(--border-soft)] last:border-b-0 transition-colors hover:bg-surface-muted/40"
             >
-              <td className="py-3 px-4">
-                {dish.imageUrl ? (
-                  <img
-                    src={dish.imageUrl}
-                    alt={dish.name}
-                    className="w-12 h-12 object-cover rounded"
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-700 rounded flex items-center justify-center text-zinc-400 text-xs">
-                    Sin imagen
+              <td className="py-3 px-5">
+                <div className="flex items-center gap-3">
+                  {dish.imageUrl ? (
+                    <img
+                      src={dish.imageUrl}
+                      alt={dish.name}
+                      className="h-12 w-12 rounded-xl object-cover ring-1 ring-[var(--border-soft)]"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface-muted text-zinc-400 ring-1 ring-[var(--border-soft)]">
+                      <ImageOff className="h-4 w-4" />
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-foreground">
+                      {dish.name}
+                    </p>
                   </div>
-                )}
+                </div>
               </td>
-              <td className="py-3 px-4 font-medium">{dish.name}</td>
-              <td className="py-3 px-4 max-w-xs truncate text-zinc-500">
-                {dish.description || "Sin descripción"}
+              <td className="max-w-xs py-3 px-5">
+                <p className="truncate text-sm text-zinc-500">
+                  {dish.description || "Sin descripción"}
+                </p>
               </td>
-              <td className="py-3 px-4">${Number(dish.price).toFixed(2)}</td>
-              <td className="py-3 px-4">
-                {categories.find((c) => c.id === dish.categoryId)?.name || "-"}
-              </td>
-              <td className="py-3 px-4">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    dish.available
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                  }`}
-                >
-                  {dish.available ? "Sí" : "No"}
+              <td className="py-3 px-5">
+                <span className="font-semibold tracking-tight text-gradient-brand">
+                  ${Number(dish.price).toFixed(2)}
                 </span>
               </td>
-              <td className="py-3 px-4">
+              <td className="py-3 px-5">
+                <span className="inline-flex items-center rounded-full border border-[var(--border-soft)] bg-surface-muted px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                  {categories.find((c) => c.id === dish.categoryId)?.name ||
+                    "—"}
+                </span>
+              </td>
+              <td className="py-3 px-5">
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                    dish.available
+                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400"
+                      : "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400"
+                  }`}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      dish.available ? "bg-emerald-500" : "bg-rose-500"
+                    }`}
+                  />
+                  {dish.available ? "Disponible" : "No disponible"}
+                </span>
+              </td>
+              <td className="py-3 px-5 text-right">
                 <DishActions dish={dish} categories={categories} />
               </td>
             </tr>

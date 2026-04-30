@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { ArrowRight, Lock, Mail } from "lucide-react";
 import { RHFInput } from "@components/atoms/renderFields";
 
 interface LoginForm {
@@ -38,50 +39,79 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold">Iniciar Sesión</h1>
-          <p className="text-zinc-500 mt-2">
-            Accede a tu cuenta de RestaurantCMS
+    <div className="w-full max-w-md animate-fade-up">
+      <div className="relative overflow-hidden rounded-3xl border border-[var(--border-soft)] bg-surface/80 p-8 shadow-elevated backdrop-blur-xl sm:p-10">
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-1 bg-gradient-brand"
+        />
+
+        <div className="mb-8 text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary-600">
+            Bienvenido de vuelta
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Iniciar <span className="text-gradient-brand">Sesión</span>
+          </h1>
+          <p className="mt-2 text-sm text-zinc-500">
+            Accede a tu panel de RestaurantCMS
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {errors.root && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-md text-sm">
-              {errors.root.message}
+            <div className="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-sm text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-rose-400">
+              <span className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500" />
+              <span>{errors.root.message}</span>
             </div>
           )}
 
-          <RHFInput
-            type="email"
-            register={register}
-            name="email"
-            placeholder="Email"
-            isRequired
-          />
+          <div>
+            <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <Mail className="h-3.5 w-3.5" />
+              Email
+            </label>
+            <RHFInput
+              type="email"
+              register={register}
+              name="email"
+              placeholder="tu@email.com"
+              isRequired
+            />
+          </div>
 
-          <RHFInput
-            type="password"
-            register={register}
-            name="password"
-            placeholder="Contraseña"
-            isRequired
-          />
+          <div>
+            <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <Lock className="h-3.5 w-3.5" />
+              Contraseña
+            </label>
+            <RHFInput
+              type="password"
+              register={register}
+              name="password"
+              placeholder="••••••••"
+              isRequired
+            />
+          </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 transition-colors"
+            className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-brand px-4 py-3 text-sm font-semibold text-white shadow-glow transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? "Cargando..." : "Iniciar Sesión"}
+            {!isSubmitting && (
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            )}
           </button>
         </form>
 
-        <p className="text-center mt-6 text-sm text-zinc-500">
+        <p className="mt-8 text-center text-sm text-zinc-500">
           ¿No tienes cuenta?{" "}
-          <Link href="/register" className="text-primary-500 hover:underline">
+          <Link
+            href="/register"
+            className="font-semibold text-primary-600 transition-colors hover:text-primary-700"
+          >
             Regístrate
           </Link>
         </p>

@@ -1,4 +1,4 @@
-import { MenuStyle } from "../../types";
+import type { MenuStyle } from "../../../types";
 
 interface MenuDisplayProps {
   tenant: {
@@ -39,19 +39,39 @@ export function MenuDisplay({ tenant }: MenuDisplayProps) {
       style={{
         backgroundColor: style.secondaryColor,
         fontFamily: style.fontFamily,
+        color: style.primaryColor,
       }}
     >
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-6 py-8 text-center">
+      <header
+        className="relative overflow-hidden border-b"
+        style={{ borderColor: `${style.primaryColor}15` }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            background: `radial-gradient(circle at 20% 0%, ${style.accentColor} 0%, transparent 50%), radial-gradient(circle at 80% 100%, ${style.accentColor} 0%, transparent 50%)`,
+          }}
+        />
+        <div className="relative container mx-auto px-6 py-12 text-center sm:py-16">
           {tenant.logoUrl && (
             <img
               src={tenant.logoUrl}
               alt={tenant.name}
-              className="w-24 h-24 mx-auto mb-4 object-contain"
+              className="mx-auto mb-6 h-24 w-24 object-contain"
             />
           )}
+          <span
+            className="mb-4 inline-block rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em]"
+            style={{
+              backgroundColor: `${style.accentColor}30`,
+              color: style.primaryColor,
+            }}
+          >
+            Carta digital
+          </span>
           <h1
-            className="text-4xl font-bold"
+            className="text-balance text-4xl font-bold tracking-tight sm:text-5xl"
             style={{ color: style.primaryColor }}
           >
             {tenant.name}
@@ -61,65 +81,97 @@ export function MenuDisplay({ tenant }: MenuDisplayProps) {
 
       <main className="container mx-auto px-6 py-12">
         {tenant.categories.length === 0 ? (
-          <div className="text-center py-12 text-zinc-500">
+          <div
+            className="rounded-2xl border-2 border-dashed py-16 text-center"
+            style={{
+              borderColor: `${style.primaryColor}25`,
+              color: `${style.primaryColor}80`,
+            }}
+          >
             Este restaurante aún no tiene platos en su menú.
           </div>
         ) : (
           <div className="space-y-16">
             {tenant.categories.map((category) => (
               <section key={category.id}>
-                <div className="mb-8 text-center">
+                <div className="mb-8 flex flex-col items-center text-center">
+                  <div
+                    className="mb-3 h-px w-12"
+                    style={{ backgroundColor: `${style.accentColor}80` }}
+                  />
                   <h2
-                    className="text-2xl font-bold mb-2"
+                    className="text-3xl font-bold tracking-tight"
                     style={{ color: style.primaryColor }}
                   >
                     {category.name}
                   </h2>
                   {category.description && (
-                    <p className="text-zinc-500">{category.description}</p>
+                    <p
+                      className="mt-2 max-w-xl text-sm"
+                      style={{ color: `${style.primaryColor}99` }}
+                    >
+                      {category.description}
+                    </p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {category.dishes.map((dish) => (
-                    <div
+                    <article
                       key={dish.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden"
+                      className="group overflow-hidden rounded-2xl bg-white shadow-md transition-transform hover:-translate-y-1 hover:shadow-xl"
                     >
-                      {dish.imageUrl && (
-                        <img
-                          src={dish.imageUrl}
-                          alt={dish.name}
-                          className="w-full h-48 object-cover"
-                        />
+                      {dish.imageUrl ? (
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={dish.imageUrl}
+                            alt={dish.name}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          {!dish.available && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-sm">
+                              <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-rose-600">
+                                No disponible
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          className="flex h-32 items-center justify-center text-3xl font-bold opacity-15"
+                          style={{
+                            backgroundColor: `${style.accentColor}30`,
+                            color: style.primaryColor,
+                          }}
+                        >
+                          {dish.name.charAt(0).toUpperCase()}
+                        </div>
                       )}
                       <div className="p-6">
-                        <div className="flex justify-between items-start mb-2">
+                        <div className="mb-2 flex items-baseline justify-between gap-3">
                           <h3
-                            className="text-xl font-semibold"
+                            className="text-lg font-semibold tracking-tight"
                             style={{ color: style.primaryColor }}
                           >
                             {dish.name}
                           </h3>
                           <span
-                            className="text-lg font-bold"
+                            className="shrink-0 text-lg font-bold"
                             style={{ color: style.accentColor }}
                           >
                             ${Number(dish.price).toFixed(2)}
                           </span>
                         </div>
                         {dish.description && (
-                          <p className="text-zinc-500 text-sm">
+                          <p
+                            className="text-sm leading-relaxed"
+                            style={{ color: `${style.primaryColor}99` }}
+                          >
                             {dish.description}
                           </p>
                         )}
-                        {!dish.available && (
-                          <span className="inline-block mt-2 px-2 py-1 bg-red-100 text-red-700 text-xs rounded">
-                            No disponible
-                          </span>
-                        )}
                       </div>
-                    </div>
+                    </article>
                   ))}
                 </div>
               </section>
@@ -128,7 +180,13 @@ export function MenuDisplay({ tenant }: MenuDisplayProps) {
         )}
       </main>
 
-      <footer className="border-t mt-16 py-8 text-center text-zinc-500 text-sm">
+      <footer
+        className="mt-16 border-t py-8 text-center text-sm"
+        style={{
+          borderColor: `${style.primaryColor}15`,
+          color: `${style.primaryColor}80`,
+        }}
+      >
         <p>Menú digital de {tenant.name}</p>
       </footer>
     </div>
