@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { updateMenuStyle } from "@lib/api/menu-styles";
 import { GenericSelect } from "@components/atoms/select/GenericSelect";
-import { GenericInput } from "@components/atoms/input";
+import { RHFInput } from "@components/atoms/renderFields";
 import type { SelectOption } from "@components/atoms/select/GenericSelect";
 
 const TEMPLATES: SelectOption[] = [
@@ -91,9 +91,10 @@ export function MenuStylesEditor({ menuStyle }: { menuStyle: MenuStyle }) {
                   onChange={(e) => setValue("primaryColor", e.target.value)}
                   className="w-12 h-12 rounded cursor-pointer"
                 />
-                <GenericInput
+                <RHFInput
                   type="text"
-                  {...register("primaryColor")}
+                  register={register}
+                  name="primaryColor"
                 />
               </div>
             </div>
@@ -108,9 +109,10 @@ export function MenuStylesEditor({ menuStyle }: { menuStyle: MenuStyle }) {
                   onChange={(e) => setValue("secondaryColor", e.target.value)}
                   className="w-12 h-12 rounded cursor-pointer"
                 />
-                <GenericInput
+                <RHFInput
                   type="text"
-                  {...register("secondaryColor")}
+                  register={register}
+                  name="secondaryColor"
                 />
               </div>
             </div>
@@ -125,9 +127,10 @@ export function MenuStylesEditor({ menuStyle }: { menuStyle: MenuStyle }) {
                   onChange={(e) => setValue("accentColor", e.target.value)}
                   className="w-12 h-12 rounded cursor-pointer"
                 />
-                <GenericInput
+                <RHFInput
                   type="text"
-                  {...register("accentColor")}
+                  register={register}
+                  name="accentColor"
                 />
               </div>
             </div>

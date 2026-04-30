@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@heroui/react";
+import { Input, FieldError } from "@heroui/react";
 import type { UseFormRegister } from "react-hook-form";
 
 interface GenericInputProps {
@@ -23,6 +23,7 @@ interface GenericInputProps {
   pattern?: string;
   className?: string;
   fullWidth?: boolean;
+  error?: string;
 }
 
 export function GenericInput({
@@ -45,8 +46,10 @@ export function GenericInput({
   pattern,
   className,
   fullWidth = true,
+  error,
 }: GenericInputProps) {
   const isControlled = value !== undefined;
+  const isInvalid = !!error;
 
   const inputProps = {
     type,
@@ -66,24 +69,33 @@ export function GenericInput({
     value: isControlled ? value : undefined,
     defaultValue: !isControlled ? defaultValue : undefined,
     onChange: isControlled ? onChange : undefined,
+    isInvalid,
   };
 
   if (register && name) {
     const { onChange: regOnChange, onBlur, name: regName, ref } = register(name);
 
     return (
-      <Input
-        {...inputProps}
-        name={regName}
-        onChange={(e) => {
-          regOnChange(e);
-          if (onChange) onChange(e);
-        }}
-        onBlur={onBlur}
-        ref={ref}
-      />
+      <>
+        <Input
+          {...inputProps}
+          name={regName}
+          onChange={(e) => {
+            regOnChange(e);
+            if (onChange) onChange(e);
+          }}
+          onBlur={onBlur}
+          ref={ref}
+        />
+        {error && <FieldError>{error}</FieldError>}
+      </>
     );
   }
 
-  return <Input {...inputProps} />;
+  return (
+    <>
+      <Input {...inputProps} />
+      {error && <FieldError>{error}</FieldError>}
+    </>
+  );
 }

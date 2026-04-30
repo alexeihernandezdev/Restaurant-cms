@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { register as registerUser } from "@lib/api/auth";
+import { RHFInput } from "@components/atoms/renderFields";
 
 interface RegisterForm {
   name: string;
@@ -56,104 +57,46 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-2">
-              Tu Nombre
-            </label>
-            <input
-              id="name"
-              type="text"
-              {...register("name", { required: "Nombre requerido" })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
-          </div>
+          <RHFInput
+            type="text"
+            register={register}
+            name="name"
+            placeholder="Tu Nombre"
+            isRequired
+          />
 
-          <div>
-            <label
-              htmlFor="restaurantName"
-              className="block text-sm font-medium mb-2"
-            >
-              Nombre del Restaurante
-            </label>
-            <input
-              id="restaurantName"
-              type="text"
-              {...register("restaurantName", {
-                required: "Nombre del restaurante requerido",
-              })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.restaurantName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.restaurantName.message}
-              </p>
-            )}
-          </div>
+          <RHFInput
+            type="text"
+            register={register}
+            name="restaurantName"
+            placeholder="Nombre del Restaurante"
+            isRequired
+          />
 
-          <div>
-            <label htmlFor="slug" className="block text-sm font-medium mb-2">
-              Subdominio (URL)
-            </label>
-            <div className="flex items-center">
-              <input
-                id="slug"
-                type="text"
-                {...register("slug", { required: "Subdominio requerido" })}
-                onChange={(e) => handleSlugChange(e.target.value)}
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-l-md dark:bg-zinc-800"
-                placeholder="mi-restaurante"
-              />
-              <span className="px-3 py-2 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-sm">
-                .restaurant.com
-              </span>
-            </div>
-            {errors.slug && (
-              <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>
-            )}
-          </div>
+          <RHFInput
+            type="text"
+            register={register}
+            name="slug"
+            placeholder="Subdominio (URL)"
+            isRequired
+            onChange={(e) => handleSlugChange(e.target.value)}
+          />
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              {...register("email", { required: "Email requerido" })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          <RHFInput
+            type="email"
+            register={register}
+            name="email"
+            placeholder="Email"
+            isRequired
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-2"
-            >
-              Contraseña
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password", {
-                required: "Contraseña requerida",
-                minLength: { value: 6, message: "Mínimo 6 caracteres" },
-              })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <RHFInput
+            type="password"
+            register={register}
+            name="password"
+            placeholder="Contraseña"
+            isRequired
+          />
 
           <button
             type="submit"

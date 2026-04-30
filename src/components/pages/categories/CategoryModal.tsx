@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createCategory } from "@lib/api/categories";
 import { GenericModal } from "@components/organisms/GenericModal";
 import { useForm } from "react-hook-form";
-import { GenericInput } from "@components/atoms/input";
+import { RHFInput } from "@components/atoms/renderFields";
 import { GenericButton } from "@components/atoms/button";
 
 interface CategoryForm {
@@ -29,6 +29,7 @@ export function CategoryModal() {
   });
 
   const onSubmit = async (data: CategoryForm) => {
+    console.log(data);
     try {
       await createCategory(data);
       setIsOpen(false);
@@ -38,6 +39,8 @@ export function CategoryModal() {
       throw error;
     }
   };
+
+  console.log(errors);
 
   return (
     <GenericModal
@@ -66,14 +69,18 @@ export function CategoryModal() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4"
       >
-        <GenericInput
+        <RHFInput
           type="text"
-          {...register("name", { required: "Nombre requerido" })}
+          register={register}
+          name="name"
           placeholder="Nombre de la categoría"
+          isRequired
+          error={errors.name?.message as string}
         />
-        <GenericInput
+        <RHFInput
           type="text"
-          {...register("description")}
+          register={register}
+          name="description"
           placeholder="Descripción (opcional)"
         />
       </form>

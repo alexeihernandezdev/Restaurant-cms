@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { RHFInput } from "@components/atoms/renderFields";
 
 interface LoginForm {
   email: string;
@@ -53,42 +54,21 @@ export default function LoginPage() {
             </div>
           )}
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              {...register("email", { required: "Email requerido" })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          <RHFInput
+            type="email"
+            register={register}
+            name="email"
+            placeholder="Email"
+            isRequired
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-2"
-            >
-              Contraseña
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password", { required: "Contraseña requerida" })}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <RHFInput
+            type="password"
+            register={register}
+            name="password"
+            placeholder="Contraseña"
+            isRequired
+          />
 
           <button
             type="submit"

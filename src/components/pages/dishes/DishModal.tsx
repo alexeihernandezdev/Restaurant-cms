@@ -6,7 +6,7 @@ import { createDish } from "@lib/api/dishes";
 import { uploadImage } from "@lib/api/upload";
 import { GenericModal } from "@components/organisms/GenericModal";
 import { GenericSelect } from "@components/atoms/select/GenericSelect";
-import { GenericInput } from "@components/atoms/input";
+import { RHFInput, RHFTextarea } from "@components/atoms/renderFields";
 import { GenericButton } from "@components/atoms/button";
 import { DropZone } from "@components/molecules";
 import { useForm } from "react-hook-form";
@@ -86,6 +86,7 @@ export function DishModal({ categories }: DishModalProps) {
       title="Crear Nuevo Plato"
       isOpen={isOpen}
       onOpenChange={setIsOpen}
+      className="max-w-xl w-full"
       footer={
         <>
           <GenericButton variant="outline" onPress={() => setIsOpen(false)}>
@@ -107,22 +108,25 @@ export function DishModal({ categories }: DishModalProps) {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4"
       >
-        <GenericInput
+        <RHFInput
           type="text"
-          {...register("name", { required: "Nombre requerido" })}
+          register={register}
+          name="name"
           placeholder="Nombre del plato"
+          isRequired
         />
-        <textarea
-          {...register("description")}
+        <RHFTextarea
+          register={register}
+          name="description"
           placeholder="Descripción (opcional)"
-          className="w-full px-3 py-2 border border-zinc-300 rounded-md"
-          rows={3}
         />
-        <GenericInput
+        <RHFInput
           type="number"
           step="0.01"
-          {...register("price", { required: "Precio requerido" })}
+          register={register}
+          name="price"
           placeholder="Precio"
+          isRequired
         />
         <GenericSelect
           value={categoryId}

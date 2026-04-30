@@ -50,9 +50,11 @@ export function GenericModal({
         <Modal.Container placement={placement} size={size}>
           <Modal.Dialog className={className}>
             <Modal.Header>
-              <Modal.Heading>{title}</Modal.Heading>
+              <Modal.Heading className="text-xl font-bold text-zinc-800 border-b border-zinc-200 pb-3 mb-2">
+                {title}
+              </Modal.Heading>
             </Modal.Header>
-            <Modal.Body>{children}</Modal.Body>
+            <Modal.Body className="overflow-visible">{children}</Modal.Body>
             {footer && <Modal.Footer>{footer}</Modal.Footer>}
           </Modal.Dialog>
         </Modal.Container>

@@ -9,7 +9,11 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export function EmptyState({ message, actionLabel, onAction }: EmptyStateProps) {
+export function EmptyState({
+  message,
+  actionLabel,
+  onAction,
+}: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-8">
       <div className="relative mb-6">
@@ -19,16 +23,11 @@ export function EmptyState({ message, actionLabel, onAction }: EmptyStateProps) 
         <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-700" />
         <div className="absolute -bottom-2 -left-2 w-4 h-4 rounded-full bg-zinc-300 dark:bg-zinc-600" />
       </div>
-      <p className="text-lg text-zinc-600 dark:text-zinc-400 text-center max-w-sm mb-4">
+      <p className="text-lg text-zinc-500 dark:text-zinc-400 text-center max-w-sm mb-4">
         {message}
       </p>
       {actionLabel && onAction && (
-        <Button
-          color="primary"
-          variant="flat"
-          onPress={onAction}
-          className="mt-2"
-        >
+        <Button variant="primary" onPress={onAction} className="mt-2">
           {actionLabel}
         </Button>
       )}
