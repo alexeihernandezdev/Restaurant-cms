@@ -10,7 +10,9 @@ vi.mock("@lib/api/dishes", () => ({
 }));
 
 vi.mock("@lib/api/upload", () => ({
-  uploadImage: vi.fn().mockResolvedValue({ url: "http://example.com/image.jpg" }),
+  uploadImage: vi
+    .fn()
+    .mockResolvedValue({ url: "http://example.com/image.jpg" }),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -45,10 +47,13 @@ describe("DishModal", () => {
     await user.click(screen.getByText("Nuevo Plato"));
 
     await user.type(screen.getByPlaceholderText("Nombre del plato"), "Paella");
-    await user.type(screen.getByPlaceholderText("Descripción (opcional)"), "Arroz con marisco");
+    await user.type(
+      screen.getByPlaceholderText("Descripción (opcional)"),
+      "Arroz con marisco",
+    );
     await user.type(screen.getByPlaceholderText("Precio"), "15.99");
 
-    const submitButton = screen.getByRole("button", { name: "Crear" });
+    const submitButton = screen.getByRole("button", { name: /crear plato/i });
     await user.click(submitButton);
 
     await waitFor(() => {

@@ -1,0 +1,41 @@
+---
+description: Never use Prisma client directly - use @lib/db functions instead
+globs: **/*.ts
+---
+
+# No Direct Prisma Usage
+
+## Rule
+
+`import { prisma } from "@lib/prisma"` is **never** allowed in any `.ts` file.
+
+## Exceptions
+
+The only file that may import `PrismaClient` directly is `src/lib/prisma.ts` (singleton export).
+
+## How to Fix
+
+Instead of direct Prisma calls, import functions from `@lib/db`:
+
+```typescript
+// BAD
+import { prisma } from "@lib/prisma";
+const dishes = await prisma.dish.findMany(...);
+
+// GOOD
+import { getDishes } from "@lib/db/dishes";
+const dishes = await getDishes(...);
+```
+
+## Available Modules
+
+- `@lib/db/dishes` - dishes CRUD
+- `@lib/db/categories` - categories CRUD
+- `@lib/db/menuStyles` - menu styles CRUD
+- `@lib/db/tenants` - tenant queries
+- `@lib/db/users` - user queries
+- `@lib/db` - barrel export of all functions
+
+## Adding New Functions
+
+If you need a database function that doesn't exist, add it to the appropriate module in `src/lib/db/`. Never write direct Prisma calls in API routes, pages, or other application code.

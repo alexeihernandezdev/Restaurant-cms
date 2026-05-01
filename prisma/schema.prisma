@@ -36,13 +36,13 @@ model User {
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  name      String
+  id          String   @id @default(cuid())
+  name        String
   description String?
-  order     Int      @default(0)
-  tenantId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  order       Int      @default(0)
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   dishes Dish[]
@@ -71,15 +71,28 @@ model Dish {
 }
 
 model MenuStyle {
-  id              String  @id @default(cuid())
-  tenantId        String  @unique
-  template        String  @default("classic")
-  primaryColor    String  @default("#1a1a1a")
-  secondaryColor  String  @default("#f5f5f5")
-  accentColor     String  @default("#d4a574")
-  fontFamily      String  @default("inter")
-  logoUrl         String?
-  coverImageUrl   String?
+  id               String  @id @default(cuid())
+  tenantId         String  @unique
+  template         String  @default("classic")
+  primaryColor     String  @default("#1a1a1a")
+  secondaryColor   String  @default("#f5f5f5")
+  accentColor      String  @default("#d4a574")
+  backgroundColor  String  @default("#ffffff")
+  fontFamily       String  @default("inter")
+  headingFont      String  @default("playfair")
+  layout           String  @default("grid")
+  cardStyle        String  @default("elevated")
+  borderRadius     String  @default("medium")
+  spacing          String  @default("cozy")
+  showImages       Boolean @default(true)
+  showDescriptions Boolean @default(true)
+  priceStyle       String  @default("inline")
+  headerStyle      String  @default("centered")
+  dividerStyle     String  @default("line")
+  currency         String  @default("$")
+  tagline          String?
+  logoUrl          String?
+  coverImageUrl    String?
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 }

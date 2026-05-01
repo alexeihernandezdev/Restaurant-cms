@@ -1,5 +1,5 @@
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { getDishes, getCategories } from "@lib/db";
 import { redirect } from "next/navigation";
 import { UtensilsCrossed } from "lucide-react";
 import { DishesTable } from "@components/pages/dishes/DishesTable";
@@ -15,16 +15,26 @@ export default async function DishesPage() {
   }
 
   const [categories, dishes] = await Promise.all([
-    prisma.category.findMany({
-      where: { tenantId },
-      orderBy: { order: "asc" },
-    }),
-    prisma.dish.findMany({
-      where: { tenantId },
-      include: { category: true },
-      orderBy: { order: "asc" },
-    }),
+    getCategories(tenantId),
+    getDishes(tenantId),
   ]);
+
+  const dishesForClient = dishes.map((d) => ({
+    id: d.id,
+    name: d.name,
+    description: d.description,
+    price: Number(d.price),
+    imageUrl: d.imageUrl,
+    available: d.available,
+    order: d.order,
+    categoryId: d.categoryId,
+    tenantId: d.tenantId,
+  }));
+
+  const categoriesForClient = categories.map((c) => ({
+    id: c.id,
+    name: c.name,
+  }));
 
   return (
     <div>
@@ -33,11 +43,11 @@ export default async function DishesPage() {
         title="Platos"
         description="Gestiona los platillos de tu carta. Organízalos, edita precios y mucho más."
         icon={UtensilsCrossed}
-        actions={<DishModal categories={categories} />}
+        actions={<DishModal categories={categoriesForClient} />}
       />
 
       <div className="rounded-2xl border border-[var(--border-soft)] bg-surface shadow-soft">
-        <DishesTable dishes={dishes as any} categories={categories} />
+        <DishesTable dishes={dishesForClient} categories={categoriesForClient} />
       </div>
     </div>
   );

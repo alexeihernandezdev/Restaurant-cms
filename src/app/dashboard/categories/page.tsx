@@ -1,5 +1,5 @@
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { getCategories } from "@lib/db";
 import { redirect } from "next/navigation";
 import { FolderTree } from "lucide-react";
 import { CategoriesList } from "@components/pages/categories/CategoriesList";
@@ -14,15 +14,7 @@ export default async function CategoriesPage() {
     redirect("/login");
   }
 
-  const categories = await prisma.category.findMany({
-    where: { tenantId },
-    include: {
-      _count: {
-        select: { dishes: true },
-      },
-    },
-    orderBy: { order: "asc" },
-  });
+  const categories = await getCategories(tenantId);
 
   return (
     <div>

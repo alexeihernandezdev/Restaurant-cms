@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import {
+  updateCategory,
+  deleteCategory,
+  getCategoryById,
+} from "@lib/db/categories";
 
 export async function PUT(
   req: NextRequest,
@@ -15,9 +19,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const existing = await prisma.category.findFirst({
-      where: { id, tenantId },
-    });
+    const existing = await getCategoryById(id, tenantId);
 
     if (!existing) {
       return NextResponse.json(
@@ -28,13 +30,11 @@ export async function PUT(
 
     const { name, description } = await req.json();
 
-    const category = await prisma.category.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(description !== undefined && { description }),
-      },
-    });
+    const category = await updateCategory(
+      id,
+      tenantId,
+      { name, description },
+    );
 
     return NextResponse.json(category);
   } catch (error) {
@@ -56,9 +56,7 @@ export async function DELETE(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const existing = await prisma.category.findFirst({
-      where: { id, tenantId },
-    });
+    const existing = await getCategoryById(id, tenantId);
 
     if (!existing) {
       return NextResponse.json(
@@ -67,7 +65,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.category.delete({ where: { id } });
+    await deleteCategory(id, tenantId);
 
     return NextResponse.json({ message: "Categoría eliminada" });
   } catch (error) {

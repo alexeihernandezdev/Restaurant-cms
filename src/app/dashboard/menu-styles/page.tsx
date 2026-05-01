@@ -1,5 +1,5 @@
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { getMenuStyle, createMenuStyle } from "@lib/db";
 import { redirect } from "next/navigation";
 import { MenuStylesEditor } from "@components/pages/menu-styles/MenuStylesEditor";
 
@@ -11,14 +11,10 @@ export default async function MenuStylesPage() {
     redirect("/login");
   }
 
-  const menuStyle = await prisma.menuStyle.findUnique({
-    where: { tenantId },
-  });
+  const menuStyle = await getMenuStyle(tenantId);
 
   if (!menuStyle) {
-    const newStyle = await prisma.menuStyle.create({
-      data: { tenantId },
-    });
+    const newStyle = await createMenuStyle(tenantId);
     return <MenuStylesEditor menuStyle={newStyle} />;
   }
 

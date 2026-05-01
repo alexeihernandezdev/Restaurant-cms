@@ -28,6 +28,7 @@ This guide documents the component architecture for the RestaurantCMS project, f
 A reusable input component built on HeroUI Input.
 
 **Props:**
+
 - `type?: "text" | "number" | "email" | "password" | "tel" | "url"` - Input type
 - `placeholder?: string` - Placeholder text
 - `label?: string` - Label text
@@ -51,6 +52,7 @@ A reusable input component built on HeroUI Input.
 - `fullWidth?: boolean` - Full width (default: true)
 
 **Usage Example:**
+
 ```tsx
 // Controlled
 <GenericInput
@@ -76,6 +78,7 @@ A reusable input component built on HeroUI Input.
 A reusable select component built on HeroUI Select.
 
 **Props:**
+
 - `value?: Key | null` - Controlled value
 - `defaultValue?: Key | null` - Default value
 - `onChange?: (value: Key | null) => void` - Change handler
@@ -102,11 +105,13 @@ A reusable select component built on HeroUI Select.
 A reusable empty state component with icon and optional action button.
 
 **Props:**
+
 - `message: string` - The message to display
 - `actionLabel?: string` - Label for optional action button
 - `onAction?: () => void` - Handler for optional action
 
 **Usage Example:**
+
 ```tsx
 <EmptyState
   message="No hay platos registrados"
@@ -127,30 +132,48 @@ Image upload dropzone component using react-dropzone.
 
 **File:** `src/components/organisms/GenericModal.tsx`
 
-A reusable modal component built on HeroUI Modal.
+An eye-catching, reusable modal built on HeroUI Modal v3. Features a blurred
+backdrop, gradient mesh accent in the header, slide-and-zoom entry animation,
+floating close button and a slot for a header icon plus optional description.
 
 **Props:**
-- `triggerText?: string` - Button text to open modal
+
+- `triggerText?: string` - Default trigger button text
+- `triggerIcon?: ComponentType` - Icon for the default trigger button (lucide)
+- `triggerVariant?: GenericButtonProps["variant"]` - Trigger button variant
+- `trigger?: ReactNode` - Custom trigger element (overrides default button)
 - `title: string` - Modal title
+- `description?: string` - Subtitle shown below the title
+- `icon?: ComponentType` - Decorative header icon (lucide)
+- `iconClass?: string` - Tailwind classes for header icon container (defaults to brand gradient)
 - `children: ReactNode` - Modal content
-- `footer?: ReactNode` - Modal footer content
+- `footer?: ReactNode` - Footer content (placed in muted action bar)
 - `isOpen?: boolean` - Controlled open state
 - `onOpenChange?: (isOpen: boolean) => void` - Controlled state handler
 - `size?: "xs" | "sm" | "md" | "lg" | "cover" | "full"`
 - `placement?: "auto" | "top" | "center" | "bottom"`
 - `isDismissable?: boolean`
 - `isKeyboardDismissDisabled?: boolean`
-- `className?: string`
+- `className?: string` - Extra classes merged into the dialog
 
 **Usage Example:**
+
 ```tsx
+import { Plus, FolderPlus } from "lucide-react";
+
 <GenericModal
-  triggerText="Open"
-  title="My Modal"
-  footer={<Button>Confirm</Button>}
+  triggerText="Nueva Categoría"
+  triggerIcon={Plus}
+  title="Crear Nueva Categoría"
+  description="Agrupa platos similares para tu carta."
+  icon={FolderPlus}
+  iconClass="bg-gradient-brand text-white shadow-glow"
+  isOpen={isOpen}
+  onOpenChange={setIsOpen}
+  footer={<Button>Confirmar</Button>}
 >
   <FormContent />
-</GenericModal>
+</GenericModal>;
 ```
 
 ### When to Use GenericModal vs Specific Modal
@@ -177,6 +200,7 @@ Creates a new category with name and description. Uses internal state management
 Provides edit and delete actions for a category. Uses native browser reload for refresh.
 
 **Props:**
+
 - `category: { id, name, description }`
 
 #### CategoriesList
@@ -186,6 +210,7 @@ Provides edit and delete actions for a category. Uses native browser reload for 
 Grid display of all categories. Shows dish count per category.
 
 **Props:**
+
 - `categories: Category[]`
 
 ### Dishes
@@ -197,6 +222,7 @@ Grid display of all categories. Shows dish count per category.
 Creates a new dish with image upload support. Uses GenericModal internally.
 
 **Props:**
+
 - `categories: { id: string; name: string }[]`
 
 #### DishActions
@@ -206,6 +232,7 @@ Creates a new dish with image upload support. Uses GenericModal internally.
 Provides edit and delete actions for a dish.
 
 **Props:**
+
 - `dish: Dish`
 - `categories: { id: string; name: string }[]`
 
@@ -216,6 +243,7 @@ Provides edit and delete actions for a dish.
 Table display of dishes with image, name, description, price, category, availability, and actions.
 
 **Props:**
+
 - `dishes: Dish[]`
 - `categories: { id: string; name: string }[]`
 
@@ -228,6 +256,7 @@ Table display of dishes with image, name, description, price, category, availabi
 Public menu display with customizable styling based on tenant's MenuStyle.
 
 **Props:**
+
 - `tenant: { name, slug, logoUrl, menuStyle, categories[] }`
 
 #### QRCodeGenerator
@@ -237,6 +266,7 @@ Public menu display with customizable styling based on tenant's MenuStyle.
 Generates and displays a downloadable QR code for the menu URL.
 
 **Props:**
+
 - `tenantSlug: string`
 
 ### Dashboard
@@ -248,6 +278,7 @@ Generates and displays a downloadable QR code for the menu URL.
 Navigation sidebar for the dashboard with user info and logout.
 
 **Props:**
+
 - `user: { name?, email }`
 
 ## Guidelines for New Components

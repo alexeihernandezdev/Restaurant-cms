@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { createDish, getDishes } from "@lib/db/dishes";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,17 +27,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const dish = await prisma.dish.create({
-      data: {
+    const dish = await createDish(
+      {
         name,
         description,
         price,
         categoryId,
         imageUrl,
         available,
-        tenantId,
       },
-    });
+      tenantId,
+    );
 
     return NextResponse.json(dish, { status: 201 });
   } catch (error) {
@@ -58,14 +58,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get("categoryId");
 
-    const dishes = await prisma.dish.findMany({
-      where: {
-        tenantId,
-        ...(categoryId && { categoryId }),
-      },
-      include: { category: true },
-      orderBy: { order: "asc" },
-    });
+    const dishes = await getDishes(tenantId, categoryId || undefined);
 
     return NextResponse.json(dishes);
   } catch (error) {

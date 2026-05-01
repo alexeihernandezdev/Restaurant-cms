@@ -36,7 +36,20 @@ export interface MenuStyle {
   primaryColor: string;
   secondaryColor: string;
   accentColor: string;
+  backgroundColor: string;
   fontFamily: string;
+  headingFont: string;
+  layout: string;
+  cardStyle: string;
+  borderRadius: string;
+  spacing: string;
+  showImages: boolean;
+  showDescriptions: boolean;
+  priceStyle: string;
+  headerStyle: string;
+  dividerStyle: string;
+  currency: string;
+  tagline: string | null;
   logoUrl: string | null;
   coverImageUrl: string | null;
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { updateDish, deleteDish, getDishById } from "@lib/db/dishes";
 
 export async function PUT(
   req: NextRequest,
@@ -15,9 +15,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const existing = await prisma.dish.findFirst({
-      where: { id, tenantId },
-    });
+    const existing = await getDishById(id, tenantId);
 
     if (!existing) {
       return NextResponse.json(
@@ -29,16 +27,13 @@ export async function PUT(
     const { name, description, price, categoryId, imageUrl, available } =
       await req.json();
 
-    const dish = await prisma.dish.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(description !== undefined && { description }),
-        ...(price && { price }),
-        ...(categoryId && { categoryId }),
-        ...(imageUrl !== undefined && { imageUrl }),
-        ...(available !== undefined && { available }),
-      },
+    const dish = await updateDish(id, tenantId, {
+      name,
+      description,
+      price,
+      categoryId,
+      imageUrl,
+      available,
     });
 
     return NextResponse.json(dish);
@@ -61,9 +56,7 @@ export async function DELETE(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const existing = await prisma.dish.findFirst({
-      where: { id, tenantId },
-    });
+    const existing = await getDishById(id, tenantId);
 
     if (!existing) {
       return NextResponse.json(
@@ -72,7 +65,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.dish.delete({ where: { id } });
+    await deleteDish(id, tenantId);
 
     return NextResponse.json({ message: "Plato eliminado" });
   } catch (error) {

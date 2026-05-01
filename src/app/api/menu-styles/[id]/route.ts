@@ -1,6 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@lib/prisma";
 import { auth } from "@lib/auth";
+import { getMenuStyleById, updateMenuStyle } from "@lib/db/menuStyles";
+
+const STRING_FIELDS = [
+  "template",
+  "primaryColor",
+  "secondaryColor",
+  "accentColor",
+  "backgroundColor",
+  "fontFamily",
+  "headingFont",
+  "layout",
+  "cardStyle",
+  "borderRadius",
+  "spacing",
+  "priceStyle",
+  "headerStyle",
+  "dividerStyle",
+  "currency",
+] as const;
+
+const BOOLEAN_FIELDS = ["showImages", "showDescriptions"] as const;
 
 export async function PUT(
   req: NextRequest,
@@ -15,9 +35,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const existing = await prisma.menuStyle.findFirst({
-      where: { id, tenantId },
-    });
+    const existing = await getMenuStyleById(id, tenantId);
 
     if (!existing) {
       return NextResponse.json(
@@ -26,19 +44,33 @@ export async function PUT(
       );
     }
 
-    const { template, primaryColor, secondaryColor, accentColor, fontFamily } =
-      await req.json();
+    const body = (await req.json()) as Record<string, unknown>;
 
-    const menuStyle = await prisma.menuStyle.update({
-      where: { id },
-      data: {
-        ...(template && { template }),
-        ...(primaryColor && { primaryColor }),
-        ...(secondaryColor && { secondaryColor }),
-        ...(accentColor && { accentColor }),
-        ...(fontFamily && { fontFamily }),
-      },
-    });
+    const data: Record<string, unknown> = {};
+
+    for (const field of STRING_FIELDS) {
+      const value = body[field];
+      if (typeof value === "string" && value.length > 0) {
+        data[field] = value;
+      }
+    }
+
+    for (const field of BOOLEAN_FIELDS) {
+      const value = body[field];
+      if (typeof value === "boolean") {
+        data[field] = value;
+      }
+    }
+
+    if ("tagline" in body) {
+      const value = body.tagline;
+      data.tagline =
+        typeof value === "string" && value.trim().length > 0
+          ? value.trim()
+          : null;
+    }
+
+    const menuStyle = await updateMenuStyle(id, tenantId, data);
 
     return NextResponse.json(menuStyle);
   } catch (error) {

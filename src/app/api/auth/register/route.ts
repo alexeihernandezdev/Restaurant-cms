@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@lib/prisma";
+import { userExistsByEmail, createUserWithTenant } from "@lib/db/users";
+import { tenantExistsBySlug as checkTenant } from "@lib/db/tenants";
 import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest) {
@@ -31,9 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingTenant = await prisma.tenant.findUnique({
-      where: { slug },
-    });
+    const existingTenant = await checkTenant(slug);
 
     if (existingTenant) {
       return NextResponse.json(
@@ -42,9 +41,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await userExistsByEmail(email);
 
     if (existingUser) {
       return NextResponse.json(
@@ -55,30 +52,12 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await prisma.$transaction(async (tx) => {
-      const tenant = await tx.tenant.create({
-        data: {
-          name: restaurantName,
-          slug,
-        },
-      });
-
-      await tx.menuStyle.create({
-        data: {
-          tenantId: tenant.id,
-        },
-      });
-
-      await tx.user.create({
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-          tenantId: tenant.id,
-        },
-      });
-
-      return tenant;
+    const result = await createUserWithTenant({
+      name,
+      restaurantName,
+      slug,
+      email,
+      password,
     });
 
     return NextResponse.json(

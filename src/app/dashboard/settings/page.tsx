@@ -1,5 +1,5 @@
 import { auth } from "@lib/auth";
-import { prisma } from "@lib/prisma";
+import { getTenant } from "@lib/db";
 import { redirect } from "next/navigation";
 import { Settings, Building2, Globe, KeyRound } from "lucide-react";
 import { PageHeader } from "@components/molecules";
@@ -12,9 +12,7 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const tenant = await prisma.tenant.findUnique({
-    where: { id: tenantId },
-  });
+  const tenant = await getTenant(tenantId);
 
   if (!tenant) {
     redirect("/login");
