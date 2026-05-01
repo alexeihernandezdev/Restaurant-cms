@@ -8,8 +8,17 @@ import {
   Sparkles,
   Building2,
 } from "lucide-react";
+import { auth } from "@lib/auth";
+import { getTenant } from "@lib/db";
+import { MenuQRCard } from "@components/pages/menu/MenuQRCard";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await auth();
+  const tenantId = session?.user?.tenantId;
+  const [tenant] = await Promise.all([
+    getTenant(tenantId || ""),
+  ]);
+  const tenantSlug = tenant?.slug;
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {/* Animated background */}
@@ -132,6 +141,22 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {tenantSlug && (
+          <section className="relative px-6 pb-12">
+            <div className="mx-auto max-w-4xl text-center">
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold tracking-tight">
+                  Tu Menú Digital
+                </h2>
+                <p className="mt-1 text-zinc-600 dark:text-zinc-300">
+                  Accede a tu carta digital y compártela con tus clientes
+                </p>
+              </div>
+              <MenuQRCard tenantSlug={tenantSlug} />
+            </div>
+          </section>
+        )}
 
         {/* Features */}
         <section className="relative px-6 py-24">

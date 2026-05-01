@@ -98,12 +98,14 @@ interface DashboardCardsProps {
   dishCount: number;
   categoryCount: number;
   menuVisits?: number;
+  tenantSlug?: string;
 }
 
 export function DashboardCards({
   dishCount,
   categoryCount,
   menuVisits = 0,
+  tenantSlug,
 }: DashboardCardsProps) {
   return (
     <div className="space-y-10">
@@ -176,7 +178,7 @@ export function DashboardCards({
             title="Ver Menú"
             description="Vista previa pública"
             icon={Eye}
-            href="/menu"
+            href={tenantSlug ? `/menu/${tenantSlug}` : "/menu"}
             gradient="from-emerald-500 to-teal-500"
           />
         </div>

@@ -6,6 +6,24 @@ export async function getTenant(id: string) {
   });
 }
 
+export async function getTenantById(id: string) {
+  return prisma.tenant.findUnique({
+    where: { id },
+    include: {
+      menuStyle: true,
+      categories: {
+        include: {
+          dishes: {
+            where: { available: true },
+            orderBy: { order: "asc" },
+          },
+        },
+        orderBy: { order: "asc" },
+      },
+    },
+  });
+}
+
 export async function getTenantBySlug(slug: string) {
   return prisma.tenant.findUnique({
     where: { slug },
